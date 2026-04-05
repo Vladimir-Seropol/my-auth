@@ -1,0 +1,225 @@
+
+.auth_layout {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+    height: 100vh;
+}
+
+.auth_layout__title {
+    text-align: left;
+    font-weight: 600;
+    font-size: 80px;
+    line-height: 100%;
+    color: rgba(31, 31, 39, 1);
+}
+
+.auth_layout__breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    height: 80px;
+    border-radius: 20px;
+    padding: 28px;
+    gap: 24px;
+    background: rgba(10, 10, 11, 1);
+    text-align: left;
+    color: rgba(255, 255, 255, 1);
+}
+.breadcrumb{
+    text-decoration: none;
+font-weight: 600;
+font-size: 24px;
+line-height: 100%;
+color: rgba(255, 255, 255, 1);
+}
+
+.auth_layout__banner {
+    width: 400px;
+    height: 204px;
+    background: rgba(10, 10, 11, 0.9);
+    border-radius: 16px;
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    padding: 24px 20px;
+    gap: 24px;
+    border-width: 8px;
+}
+
+.auth_layout__banner__title {
+    text-align: left;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 120%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+}
+
+.auth_layout__banner__description {
+    text-align: left;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 160%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+}
+.auth_layout__banner__description span {
+    font-weight: 600;
+    font-style: Semi Bold;
+    line-height: 160%;
+}
+
+.auth_layout__content {
+    display: flex;
+    gap: 40px;
+}
+
+.auth_layout__banner__image{
+    display: none;
+}
+
+/* Левая часть (форма) */
+.auth_layout__left {
+        position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    width: 560px;
+    height: 800px;
+    gap: 32px;
+    background: white;
+    margin-bottom: 20px;
+}
+
+.auth_layout__left__form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 32px 80px;
+   
+}
+
+.auth_layout__left__form__logo img{
+    position: absolute;
+    top: 16px;
+    left: 20px;
+}
+
+
+.auth_layout__left__footer{
+font-weight: 400;
+font-size: 14px;
+line-height: 100%;
+color: rgba(129, 134, 154, 1);
+}
+
+/* Правая часть картинка */
+
+.auth_layout__right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: #e9eef4;
+  /* background-image: url('Orbitto_Service.png'); */
+}
+
+
+.registerLink{
+    color: rgba(49, 160, 240, 1);
+    text-decoration: none;
+}
+
+
+/* Mobile */
+@media (max-width: 1024px) {
+    .auth_layout__left{
+        height: 600px;
+    }
+
+    .auth_layout__banner__image{
+    display: block;
+    margin-top: 100px;
+}
+
+
+
+    .auth_layout__right {
+
+        display: none;
+    }
+
+
+
+    .auth_layout__left__form{
+        margin: 0 auto;
+    }
+
+    
+}
+
+
+@media (max-width: 860px) {
+    .auth_layout {
+        gap: 10px;
+    }
+
+    .auth_layout__banner__image{
+        display: none;
+    }
+
+    .auth_layout__breadcrumbs {
+        padding: 5px;
+        gap: 5px;
+        height: 40px;
+        img{
+            width: 10px;
+        }
+    }
+
+    .breadcrumb {
+        font-size: 14px;
+
+    }
+
+    .auth_layout__title {
+        margin: 0 auto;
+        margin-top: 20px;
+        font-size: 36px;
+    }
+
+    .auth_layout__content {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .auth_layout__banner {
+        width: 100%;
+        height: auto;
+        padding: 5px 10px;
+    }
+
+    .auth_layout__banner__description {
+        font-size: 12px;
+
+    }
+
+     
+    
+
+    .auth_layout__left {
+        width: 100%;
+    }
+
+    .auth_layout__left__form {
+        margin: 0 auto;
+        padding: 10px 20px;
+        min-height: 500px;
+    }
+
+    .auth_layout__right {
+        display: none;
+    }
+}

@@ -1,0 +1,49 @@
+.success {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #0a0a0b;
+}
+
+.success__box {
+  background: white;
+  padding: 48px 64px;
+  border-radius: 16px;
+  text-align: center;
+  width: 400px;
+}
+
+.success__title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1f1f27;
+}
+
+.success__description {
+  font-size: 16px;
+  margin-bottom: 32px;
+  color: #1f1f27;
+}
+
+
+.backButton,
+.logoutButton {
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.backButton {
+  background: #f0f0f0;
+  color: #1f1f27;
+}
+
+.logoutButton {
+  background: #31a0f0;
+  color: white;
+}
