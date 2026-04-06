@@ -1,103 +1,110 @@
 # Auth Flow Frontend
 
-Frontend-реализация регистрации, авторизации и восстановления пароля для инженерного челленджа.  
-Цель — показать устойчивый клиент под реальный backend с обработкой ошибок, контролем асинхронности и продуманной архитектурой.
+Frontend-реализация регистрации, авторизации и восстановления пароля.  
+Цель — устойчивый клиент под реальный backend: ошибки, асинхронность, читаемая архитектура.
 
 ## Backend
 
-Использован: [nestjs-realworld-example-app](https://github.com/lujakob/nestjs-realworld-example-app)  
-- Контракт частично замокан для стабильной разработки  
-- Основные API (typical auth API):
-  - POST /auth/login  
-  - POST /auth/register  
-  - POST /auth/reset
+Использован форк: [nestjs-realworld-example-app](https://github.com/lujakob/nestjs-realworld-example-app) (в монорепозитории — папка `nestjs-realworld-example-app`).
+
+**Реальные эндпоинты (префикс `api`, см. `main.ts`):**
+
+| Метод | Путь | Назначение |
+|--------|------|------------|
+| POST | `/api/users/login` | вход |
+| POST | `/api/users/register` | регистрация |
+
+Тело запроса поддерживает и плоский JSON `{ email, password }`, и вложенный RealWorld-формат `{ user: { ... } }` (см. контроллер).
+
+**Ответ:** вложенный объект `user`; поле `token` с бэкенда приходит как объект `{ access_token }` из `UserService.login()` — на клиенте нормализуется в строку JWT (`resolveAuthToken` в `shared/api/endpoints/authApi.ts`).
+
+**Восстановление пароля:** на выбранном NestJS-форке отдельного API не было — сценарий на фронте реализован с **локальным моком** (`requestReset` в `authApi`), без вызова сервера.
 
 ## Запуск
 
+Репозиторий монолитный: фронт и бэкенд — соседние папки в корне.
+
 ### Backend
+
 ```bash
-cd backend
+cd nestjs-realworld-example-app
 npm install
-npm run start
+npm run build
+npm start
 ```
-Сервер: http://localhost:3000
-Swagger: http://localhost:3000/docs
 
+Сервер: http://localhost:3000  
+Swagger: http://localhost:3000/docs  
 
+Для разработки без предварительной сборки: `npm run start:dev` (после `npm install`).
 
 ### Frontend
+
 ```bash
-cd frontend
+cd auth-frontend
 npm install
 npm run dev
 ```
-Приложение: http://localhost:5173
-testEmail: test@example.com
-testPassword: 123456
 
+Приложение: http://localhost:5173  
 
-###### Архитектура
+Перед первым входом создайте пользователя через экран регистрации (тестовых учёток в репозитории нет).
 
-### Feature-Sliced Design (FSD):
-app — точка входа и маршрутизация
-pages — экраны
-features/auth — логика авторизации
-shared/api — работа с backend
-shared/lib — утилиты (например, обработка ошибок)
+## Архитектура
 
-### Состояние:
-react-hook-form + zod для форм
-@tanstack/react-query для серверного состояния
-Loading / error состояния встроены
-Контроль асинхронных сценариев
+Упрощённый **Feature-Sliced Design**:
 
-### API типизация:
-type LoginRequest = { email: string; password: string; };
-type LoginResponse = { accessToken: string; };
-Вынесено в shared/api для изоляции транспортного слоя и масштабирования
+- `app` — точка входа, провайдеры, маршрутизация  
+- `pages` — экраны  
+- `features/auth` — формы, хуки, схемы валидации  
+- `shared/api` — HTTP-клиент, эндпоинты, разбор ответов под контракт  
+- `shared/lib` — утилиты (`getErrorMessage` и т.д.)  
+- `shared/ui` — переиспользуемые поля, кнопки  
 
-### UX и устойчивость
-Блокировка повторных отправок (isPending)
-Отмена предыдущих запросов (AbortController)
-Защита от race conditions (requestId)
-Состояния: loading, error, success
-Toggle видимости пароля
-Floating labels, адаптивный layout
+**Состояние:** `react-hook-form` + Zod для форм; `@tanstack/react-query` для мутаций и серверного состояния.
 
-### Адаптивность
-Desktop: 2 колонки (форма + изображение)
-Tablet: изображение уменьшается
-Mobile: изображение скрывается
-Форма доступна на всех разрешениях
+**Типизация контракта:** `LoginRequest`, `User` и разбор токена в `shared/api` — чтобы не размазывать знание о форме ответа по компонентам.
 
-### UI и технологии
-CSS Modules — изоляция стилей
-Vite — быстрый dev-сервер
-React Query — кеширование, retry, error handling
-FSD (упрощённая) — читаемая структура, масштабируемость
+## UX и устойчивость
 
-### Тесты
-Успешная авторизация
-Обработка ошибок
-Блокировка повторной отправки
+- Блокировка повторной отправки (`isPending` / `isSubmitting` на кнопках).  
+- Ошибки сети и ответов API через `getErrorMessage`; отдельный текст при попытке регистрации уже существующего email.  
+- Retry на мутации логина отключён для 401; ограниченный retry при сетевых сбоях (`useLogin`).  
+- Toggle видимости пароля, адаптивная вёрстка (см. ниже).
+
+*Честный trade-off:* отмена запросов через `AbortController` и счётчики `requestId` в текущей версии **не внедрялись** — при необходимости это следующий шаг для длинных форм и отмены устаревших мутаций.
+
+## Адаптивность
+
+Desktop: две колонки (форма + изображение).  
+Tablet: изображение сжимается.  
+Mobile: декоративное изображение скрывается, форма остаётся доступной.
+
+## Стек
+
+- React 19, Vite, TypeScript  
+- CSS Modules  
+- Vitest + Testing Library  
+
+## Тесты
+
+Критичные сценарии логина (успех, ошибка API, блокировка кнопки при отправке):
+
 ```bash
-npm run test
+npm run test:run
 ```
-Инструменты: Vitest, Testing Library
 
-### Production-планы
-Error tracking (Sentry)
-Refresh token flow
-Критичные сценарии покрыты тестами
-i18n (локализация)
+Интерактивный режим: `npm run test`.
 
+## Production-планы
 
-### Использование ИИ
-ChatGPT и Cursor использовались для:
+- Error tracking (например Sentry)  
+- Refresh token / продление сессии  
+- Расширение тестов (регистрация, reset при появлении реального API)  
+- i18n  
 
-генерации архитектурных идей
-проверки edge cases
-ускорения написания кода
+## Использование ИИ
 
-Ключевые решения принимались вручную.
+ChatGPT и Cursor использовались для идей по структуре, разбора edge cases и ускорения правок. Архитектурные и продуктовые решения фиксировались и проверялись вручную.
 
+По правилам челленджа процесс можно дополнительно отразить в папке `.agents` в корне форка.
