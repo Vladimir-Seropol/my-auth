@@ -76,7 +76,7 @@ describe('LoginForm', () => {
 
   it('button disabled while loading', async () => {
 
-    let resolvePromise!: (value?: any) => void;
+    let resolvePromise!: (value: { data: { access_token: string } }) => void;
 
     const promise = new Promise((resolve) => {
       resolvePromise = resolve;
