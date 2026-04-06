@@ -5,6 +5,16 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: login,
 
+      onSuccess: (user) => {
+      localStorage.setItem('token', user.token);
+      
+      // window.location.href = '/';
+    },
+
+    onError: (error) => {
+      console.error('Login error', error);
+    },
+
     retry: (failureCount, error: any) => {
 
       if (error?.response?.status === 401) return false;

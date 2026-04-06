@@ -5,14 +5,15 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface UserResponse {
+export interface User {
   email: string;
   token: string;
+  username: string;
+  bio: string | null;
+  image: string | null;
 }
 
-export const login = async (
-  data: LoginRequest
-): Promise<UserResponse> => {
+export const login = async (data: LoginRequest): Promise<User> => {
   const res = await apiClient.post('/api/users/login', {
     user: data,
   });
@@ -20,22 +21,21 @@ export const login = async (
   return res.data.user;
 };
 
-export const register = async (data: LoginRequest) => {
-  const res = await apiClient.post('/api/users', {
+export const register = async (data: LoginRequest): Promise<User> => {
+  const res = await apiClient.post('/api/users/register', {
     user: {
       ...data,
-      username: data.email,
+      username: data.email, // временно используем email как username
     },
   });
 
   return res.data.user;
 };
 
-export const requestReset = async (_data?: { email: string; }) => {
+export const requestReset = async (_email: string) => {
   await new Promise((r) => setTimeout(r, 1000));
 
   return {
     message: 'Письмо отправлено',
   };
 };
-

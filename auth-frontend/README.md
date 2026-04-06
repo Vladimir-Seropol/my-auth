@@ -6,11 +6,13 @@ Frontend-реализация регистрации, авторизации и 
 ## Backend
 
 Использован: [nestjs-realworld-example-app](https://github.com/lujakob/nestjs-realworld-example-app)  
-- Контракт частично замокан для стабильной разработки  
+- Контракт полностью рабочий, без тестовых данных  
 - Основные API (typical auth API):
-  - POST /auth/login  
-  - POST /auth/register  
-  - POST /auth/reset
+  - POST /api/users/login  
+  - POST /api/users/register  
+  - POST /api/users/reset  
+
+
 
 ## Запуск
 
@@ -32,8 +34,8 @@ npm install
 npm run dev
 ```
 Приложение: http://localhost:5173
-testEmail: test@example.com
-testPassword: 123456
+
+### > ⚠ Перед входом пользователя необходимо пройти регистрацию
 
 
 ###### Архитектура

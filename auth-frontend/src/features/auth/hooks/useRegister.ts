@@ -12,4 +12,7 @@ export const useRegister = () =>
         throw new Error(message);
       }
     },
+     onSuccess: (user) => {
+      localStorage.setItem('token', user.token);
+    },
   });

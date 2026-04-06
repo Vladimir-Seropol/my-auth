@@ -78,24 +78,44 @@ export class UserController {
     if (existingUser) throw new BadRequestException('Пользователь с таким email уже существует');
 
     const newUser = await this.userService.createUser({ email, password, username });
-    return { message: 'Пользователь создан', userId: newUser.id };
+
+    // Генерация JWT сразу после регистрации
+    const token = await this.userService.login(newUser);
+
+    return {
+      user: {
+        email: newUser.email,
+        username: newUser.username,
+        bio: newUser.bio ?? null,
+        image: newUser.image ?? null,
+        token,
+      },
+    };
   }
 
   // --- Логин ---
- @Post('login')
-async login(@Body() body: LoginDto) {
+  @Post('login')
+  async login(@Body() body: LoginDto) {
     const data = body.user ?? body;
     const { email, password } = data;
 
     if (!email || !password) {
-        throw new BadRequestException('Нужно передать email и password');
+      throw new BadRequestException('Нужно передать email и password');
     }
 
     const user = await this.userService.validateUser(email, password);
     if (!user) {
-        throw new BadRequestException('Неверный email или пароль'); // сюда попадём только если пароль не совпал
+      throw new BadRequestException('Неверный email или пароль');
     }
 
-    return this.userService.login(user); // JWT
-}
+   const token = await this.userService.login(user);
+
+return {
+  user: {
+    email: user.email,
+    username: user.username,
+    token,
+  },
+};
+  }
 }
