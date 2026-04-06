@@ -19,6 +19,7 @@ Frontend-реализация регистрации, авторизации и 
 ### Backend
 ```bash
 cd backend
+npm build
 npm install
 npm run start
 ```

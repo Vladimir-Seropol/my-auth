@@ -32,10 +32,10 @@ export const register = async (data: LoginRequest): Promise<User> => {
   return res.data.user;
 };
 
-export const requestReset = async (_email: string) => {
+export const requestReset = async (email: string) => {
   await new Promise((r) => setTimeout(r, 1000));
 
   return {
-    message: 'Письмо отправлено',
+    message: `Письмо отправлено на ${email}`,
   };
 };
