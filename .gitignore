@@ -12,3 +12,7 @@ dist/
 # Mac / Windows
 .DS_Store
 Thumbs.db
+
+# SQLite (локальная БД NestJS)
+db.sqlite
+*.sqlite
