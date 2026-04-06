@@ -10,6 +10,25 @@ type FormValues = {
   password: string;
 };
 
+function registerErrorText(error: unknown): string {
+  const raw =
+    error instanceof Error
+      ? error.message
+      : typeof error === 'string'
+        ? error
+        : '';
+
+  if (!raw.trim()) {
+    return 'Ошибка регистрации';
+  }
+
+  if (/уже существует|already exists/i.test(raw)) {
+    return 'Пользователь уже был зарегистрирован';
+  }
+
+  return raw;
+}
+
 export const RegisterForm = () => {
   const {
     register,
@@ -54,7 +73,9 @@ export const RegisterForm = () => {
         Зарегистрироваться
       </SubmitButton>
 
-      {error && <p className={styles.error}>Ошибка регистрации</p>}
+      {error && (
+        <p className={styles.error}>{registerErrorText(error)}</p>
+      )}
 
       <Link to="/" className={styles.link}>
         Уже есть аккаунт? Войти

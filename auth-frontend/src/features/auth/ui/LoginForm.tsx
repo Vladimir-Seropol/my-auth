@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { apiClient } from '../../../shared/api/client.js';
+import { resolveAuthToken } from '../../../shared/api/endpoints/authApi.js';
 import { getErrorMessage } from '../../../shared/lib/getErrorMessage.js';
 import { TextInput } from '../../../shared/ui/Input.js';
 import { SubmitButton } from '../../../shared/ui/SubmitButton.js';
@@ -30,7 +31,7 @@ export const LoginForm = () => {
         password: data.password,
       });
 
-      const token = response.data.access_token;
+      const token = resolveAuthToken(response.data.user?.token);
       console.log('Access token:', token);
       localStorage.setItem('token', token);
 

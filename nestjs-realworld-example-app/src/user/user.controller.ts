@@ -108,14 +108,14 @@ export class UserController {
       throw new BadRequestException('Неверный email или пароль');
     }
 
-   const token = await this.userService.login(user);
+    const token = await this.userService.login(user);
 
-return {
-  user: {
-    email: user.email,
-    username: user.username,
-    token,
-  },
-};
+    return {
+      user: {
+        email: user.email,
+        username: user.username,
+        token,
+      },
+    };
   }
 }

@@ -50,7 +50,7 @@ export const TextInput = ({
           onFocus={handleFocus}
           onBlur={handleBlur}
           className={clsx(styles.input, { [styles.inputError]: error || localError })}
-          placeholder={focused ? '' : label} // скрываем placeholder при фокусе
+          placeholder={focused ? '' : label} 
         />
 
         {isPassword && (

@@ -29,7 +29,15 @@ beforeEach(() => {
 describe('LoginForm', () => {
   it('login success', async () => {
 
-    mockedPost.mockResolvedValue({ data: { access_token: '123' } });
+    mockedPost.mockResolvedValue({
+      data: {
+        user: {
+          email: 'test@mail.com',
+          username: 'test@mail.com',
+          token: { access_token: '123' },
+        },
+      },
+    });
 
     renderWithProviders(<LoginForm />);
 
@@ -54,7 +62,7 @@ describe('LoginForm', () => {
   });
 
   it('login error', async () => {
-    // Мокаем ошибку логина
+    
     mockedPost.mockRejectedValue({
       response: { data: { message: 'Неверный email или пароль' }, status: 400 },
     });
@@ -69,14 +77,16 @@ describe('LoginForm', () => {
     await userEvent.type(passwordInput, 'wrongpass');
     await userEvent.click(submitButton);
 
-    // Проверяем отображение ошибки
+
     const errorMessage = await screen.findByText(/неверный email или пароль/i);
     expect(errorMessage).toBeInTheDocument();
   });
 
   it('button disabled while loading', async () => {
 
-    let resolvePromise!: (value: { data: { access_token: string } }) => void;
+    let resolvePromise!: (value: {
+      data: { user: { token: { access_token: string }; email: string; username: string } };
+    }) => void;
 
     const promise = new Promise((resolve) => {
       resolvePromise = resolve;
@@ -98,7 +108,15 @@ describe('LoginForm', () => {
 
     expect(submitButton).toBeDisabled();
 
-    resolvePromise({ data: { access_token: '123' } });
+    resolvePromise({
+      data: {
+        user: {
+          email: 'test@mail.com',
+          username: 'test@mail.com',
+          token: { access_token: '123' },
+        },
+      },
+    });
 
     await waitFor(() => expect(submitButton).not.toBeDisabled());
   });
