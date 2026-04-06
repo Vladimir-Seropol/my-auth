@@ -1,14 +1,14 @@
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRegister } from '../hooks/useRegister';
 import styles from './AuthForm.module.css';
 import { Link } from 'react-router-dom';
 import { SubmitButton } from '../../../shared/ui/SubmitButton';
 import { TextInput } from '../../../shared/ui/Input';
-
-type FormValues = {
-  email: string;
-  password: string;
-};
+import {
+  registerSchema,
+  type RegisterFormValues,
+} from '../model/loginSchema';
 
 function registerErrorText(error: unknown): string {
   const raw =
@@ -34,12 +34,15 @@ export const RegisterForm = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors }, 
-  } = useForm<FormValues>();
+    formState: { errors },
+  } = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    mode: 'onSubmit',
+  });
 
   const { mutate, isPending, error, isSuccess } = useRegister();
 
-  const onSubmit = (data: FormValues) => mutate(data);
+  const onSubmit = (data: RegisterFormValues) => mutate(data);
 
   if (isSuccess) {
     return (

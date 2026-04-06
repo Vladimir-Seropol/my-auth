@@ -1,10 +1,13 @@
 import { z } from 'zod';
 
+/** Общие правила email для входа, регистрации и сброса пароля */
+export const emailSchema = z
+  .string()
+  .min(1, 'Введите email')
+  .email('Некорректный email');
+
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, 'Введите email')
-    .email('Некорректный email'),
+  email: emailSchema,
 
   password: z
     .string()
@@ -12,3 +15,7 @@ export const loginSchema = z.object({
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
+
+/** Те же поля и правила, что и при входе */
+export const registerSchema = loginSchema;
+export type RegisterFormValues = z.infer<typeof registerSchema>;

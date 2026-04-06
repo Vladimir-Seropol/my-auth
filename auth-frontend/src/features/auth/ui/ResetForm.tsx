@@ -1,19 +1,25 @@
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useReset } from '../hooks/useReset';
-import styles from './AuthForm.module.css'; 
+import styles from './AuthForm.module.css';
 import { SubmitButton } from '../../../shared/ui/SubmitButton';
 import { TextInput } from '../../../shared/ui/Input';
-
-type FormValues = {
-  email: string;
-};
+import { resetSchema, type ResetFormValues } from '../model/resetSchema';
 
 export const ResetForm = () => {
-  const { register, handleSubmit, watch, formState: { errors }  } = useForm<FormValues>();
-  const { mutate, isPending, isSuccess } = useReset();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<ResetFormValues>({
+    resolver: zodResolver(resetSchema),
+    mode: 'onSubmit',
+  });
+  const { mutate, isPending, isSuccess, error } = useReset();
 
-   const onSubmit = (data: FormValues) => {
-    mutate(data); 
+  const onSubmit = (data: ResetFormValues) => {
+    mutate(data);
   };
 
   if (isSuccess) {
@@ -37,9 +43,13 @@ export const ResetForm = () => {
               value={watch('email')}
             />
 
-      <SubmitButton isPending={isPending}>
-        Отправить
-      </SubmitButton>
+      <SubmitButton isPending={isPending}>Отправить</SubmitButton>
+
+      {error && (
+        <p className={styles.error}>
+          {error instanceof Error ? error.message : 'Ошибка отправки'}
+        </p>
+      )}
     </form>
   );
 };
