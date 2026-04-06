@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { apiClient } from '../../../shared/api/client.js';
-import { getErrorMessage } from '../../../shared/lib/getErrorMessage.js';
 import { TextInput } from '../../../shared/ui/Input.js';
 import { SubmitButton } from '../../../shared/ui/SubmitButton.js';
 import { loginSchema, type LoginFormValues } from '../model/loginSchema.js';
@@ -35,8 +34,12 @@ export const LoginForm = () => {
       localStorage.setItem('token', token);
 
       navigate('/success');
-    } catch (err: unknown) {
-      setBackendError(getErrorMessage(err));
+    } catch (err: any) {
+      if (err.response?.data?.message) {
+        setBackendError(err.response.data.message);
+      } else {
+        setBackendError('Произошла ошибка при логине');
+      }
       console.error('Login error:', err);
     }
   };

@@ -1,6 +1,6 @@
 # Auth Flow Frontend
 
-Frontend-реализация регистрации, авторизации и восстановления пароля для инженерного челленджа.  
+Frontend-реализация регистрации, авторизации и восстановления пароля.  
 Цель — показать устойчивый клиент под реальный backend с обработкой ошибок, контролем асинхронности и продуманной архитектурой.
 
 ## Backend
@@ -18,7 +18,6 @@ Frontend-реализация регистрации, авторизации и 
 
 ### Backend
 ```bash
-cd backend
 npm build
 npm install
 npm run start
@@ -30,7 +29,6 @@ Swagger: http://localhost:3000/docs
 
 ### Frontend
 ```bash
-cd frontend
 npm install
 npm run dev
 ```

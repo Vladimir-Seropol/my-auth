@@ -6,7 +6,7 @@ export const useReset = () =>
   useMutation({
     mutationFn: async (data: { email: string }) => {
       try {
-        return await requestReset(data.email);
+        return await requestReset(data);
       } catch (err) {
         const message = getErrorMessage(err);
         throw new Error(message);

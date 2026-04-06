@@ -13,7 +13,7 @@ export const SuccessPage = () => {
     if (!token) {
       navigate(routes.login, { replace: true });
     }
-  }, [navigate]);
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
